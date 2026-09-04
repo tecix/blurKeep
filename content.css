@@ -36,5 +36,5 @@ html.blurkeep-active .PvRhvb-bN97Pc {
 
 html.blurkeep-active #blurkeep-overlay {
   opacity: 1;
-  visibility: visible;
+  visibility: hidden;
 }
