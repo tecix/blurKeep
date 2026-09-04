@@ -1,0 +1,40 @@
+/*
+ * Blur the notes grid directly by class name.
+ * From DOM inspection: Keep's notes grid is <div class="notes-container">
+ * at body level. The note dialog is a separate body-level element, so it
+ * stays unblurred.
+ */
+html.blurkeep-active .RfDI4d-bN97Pc {
+  filter: blur(var(--blurkeep-blur, 6px)) !important;
+  transition: filter 0.22s ease !important;
+}
+
+/* Sidebar label tabs (Notes/Reminders/labels/Archive/Bin): blur only the
+   text span, not the tab container. Blurring the container itself would
+   rasterize its background (looks like a background-color change) and,
+   since `filter` creates a containing block for fixed-position descendants,
+   would knock Keep's hover tooltips out of place. The <span> has neither
+   a background nor positioned children, so blurring it is visually
+   text-only and never shifts layout. */
+html.blurkeep-active .PvRhvb-bN97Pc {
+  filter: blur(var(--blurkeep-blur, 6px)) !important;
+  transition: filter 0.22s ease !important;
+}
+
+/* Dim overlay — adds depth, must be above notes-container (z-index auto)
+   but below Keep's note dialog (which has a high z-index from Keep's CSS) */
+#blurkeep-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
+}
+
+html.blurkeep-active #blurkeep-overlay {
+  opacity: 1;
+  visibility: visible;
+}
