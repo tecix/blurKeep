@@ -94,7 +94,14 @@ Pushing a `v*.*.*` tag triggers `.github/workflows/release.yml`, which:
 3. Runs `web-ext sign --channel=listed`, uploading the new version to AMO under the extension's existing listing (`blurkeep@chithien460`) for review
 4. Publishes a GitHub release with the signed `.xpi` attached
 
-Nothing needs to be uploaded by hand — `web-ext sign` talks to the AMO API directly. For a **listed** add-on (the default here) the new version still goes through Mozilla's automated/human review before it's public; check review status on the [AMO developer dashboard](https://addons.mozilla.org/en-US/developers/addons). If you'd rather self-distribute without review, add `--channel=unlisted` to the `sign` script instead.
+Nothing needs to be uploaded by hand — `web-ext sign` talks to the AMO API directly. For a **listed** add-on (the default here) the new version still goes through Mozilla's automated/human review before it's public; check review status on the [AMO developer dashboard](https://addons.mozilla.org/en-US/developers/addons).
+
+### Using the new version while a listed submission is in review
+
+A listed version isn't installable until Mozilla approves it, but you don't have to wait to actually use it:
+
+- **Quick/temporary:** `npm run build`, then in Firefox go to `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → select `manifest.json` (or the built zip). Gets removed on every Firefox restart.
+- **Permanent, no review needed:** `npm run sign:self` signs the current source for self-distribution (AMO's `unlisted` channel). This is a separate signing track from the listed submission, so it doesn't conflict with it or affect its review. It signs and returns instantly — grab the `.xpi` from `web-ext-artifacts/` and either drag it into a Firefox window or install it via `about:addons` → gear icon → **Install Add-on From File**. It installs like any signed extension and persists across restarts.
 
 ## License
 

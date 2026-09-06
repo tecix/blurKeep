@@ -3,10 +3,11 @@
   "name": "BlurKeep",
   "version": "2.0.1",
   "description": "Blur background notes when editing in Google Keep for distraction-free focus",
-  "author": "Chi-Thien Tran",
+  "author": "tecix",
+  "homepage_url": "https://github.com/tecix/blurKeep",
   "browser_specific_settings": {
     "gecko": {
-      "id": "blurkeep@chithien460",
+      "id": "blurkeep@tecix",
       "strict_min_version": "150.0",
       "data_collection_permissions": {
         "required": [
