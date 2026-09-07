@@ -105,4 +105,8 @@ A listed version isn't installable until Mozilla approves it, but you don't have
 
 ## License
 
-TBD — no license file has been added yet, so all rights are reserved by default. Add a `LICENSE` file if you intend to open-source this.
+[MIT](LICENSE).
+
+AMO requires every listed version to declare a license. The signing scripts pass
+`--amo-metadata=scripts/amo-metadata.json`, which sets the version's license slug — keep that file in
+sync with `LICENSE` if the license ever changes.
