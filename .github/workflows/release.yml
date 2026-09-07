@@ -29,20 +29,22 @@ jobs:
       - name: Build extension package
         run: npm run build
 
-      - name: Sign and submit to AMO
+      - name: Locate build package
+        id: artifact
+        run: |
+          FILE=$(ls web-ext-artifacts/*.zip | head -n1)
+          echo "path=$FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Submit to AMO
         env:
           AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
           AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
         run: npm run sign
-
-      - name: Locate signed package
-        id: artifact
-        run: |
-          FILE=$(ls web-ext-artifacts/*.xpi | head -n1)
-          echo "path=$FILE" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.artifact.outputs.path }}
           generate_release_notes: true
+          body: |
+            Submitted to addons.mozilla.org for review — this build is not yet AMO-signed. Once approved, the signed .xpi is available from the add-on's edit page in the [AMO Developer Hub](https://addons.mozilla.org/developers/).

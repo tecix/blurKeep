@@ -2,6 +2,15 @@
   "categories": [
     "appearance"
   ],
+  "description": {
+    "en-US": "BlurKeep blurs the other notes on your Google Keep board while you're editing one, so the rest of the grid stops pulling your eye and you can focus on the note in front of you.\n\nFeatures:\n- Automatically blurs the notes grid whenever a note is open for editing\n- Adjustable blur intensity (1-12px) from the toolbar popup\n- One-click enable/disable toggle\n- Settings persist per-browser via storage.local\n- No data collection, no permissions beyond storage and activeTab"
+  },
+  "homepage": {
+    "en-US": "https://github.com/tecix/blurKeep"
+  },
+  "support_url": {
+    "en-US": "https://github.com/tecix/blurKeep/issues"
+  },
   "version": {
     "license": "MIT"
   }

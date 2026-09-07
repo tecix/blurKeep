@@ -61,6 +61,7 @@ This installs [`web-ext`](https://github.com/mozilla/web-ext), Mozilla's officia
 | `npm run build` | Produces a versioned `.zip` in `web-ext-artifacts/` |
 | `npm run sign` | Lints, builds, and submits the package to AMO for signing (see below) |
 | `npm run bump -- <patch\|minor\|major>` | Bumps the version in `manifest.json` + `package.json`, commits, and tags |
+| `npm run upload-assets` | Uploads `icon-128.jpg` and `screenshot.jpg` to the AMO listing (see below) |
 
 Regenerating the store assets (only needed if you change the icon/screenshot design):
 
@@ -71,7 +72,7 @@ python3 generate_assets.py
 
 ## Publishing to Mozilla Add-on Hub (AMO)
 
-Releases are automated end-to-end: bump the version, push a tag, and CI lints, builds, signs, and submits the new version to AMO, then attaches the signed `.xpi` to a GitHub release.
+Releases are automated end-to-end: bump the version, push a tag, and CI lints, builds, submits the new version to AMO (without waiting for review), then attaches the built package to a GitHub release.
 
 ### One-time setup
 
@@ -79,6 +80,7 @@ Releases are automated end-to-end: bump the version, push a tag, and CI lints, b
 2. Add them as repository secrets (Settings → Secrets and variables → Actions):
    - `AMO_JWT_ISSUER`
    - `AMO_JWT_SECRET`
+3. The listing's icon and screenshot are separate binary uploads that `web-ext` can't set — after the add-on's first listed submission is approved, run the **Upload AMO listing assets** workflow (Actions tab → workflow_dispatch) once, or `AMO_JWT_ISSUER=... AMO_JWT_SECRET=... npm run upload-assets` locally. Re-run it only when `icon-128.jpg` or `screenshot.jpg` change — it's not part of the per-release pipeline.
 
 ### Cutting a release
 
@@ -91,8 +93,8 @@ Pushing a `v*.*.*` tag triggers `.github/workflows/release.yml`, which:
 
 1. Runs `web-ext lint`
 2. Runs `web-ext build`
-3. Runs `web-ext sign --channel=listed`, uploading the new version to AMO under the extension's existing listing (`blurkeep@chithien460`) for review
-4. Publishes a GitHub release with the signed `.xpi` attached
+3. Runs `web-ext sign --channel=listed --approval-timeout=0`, uploading the new version to AMO under the extension's existing listing (`blurkeep@tecix`) and returning immediately instead of blocking on review
+4. Publishes a GitHub release with the built (unsigned) `.zip` attached, since the signed `.xpi` isn't available until Mozilla approves the version
 
 Nothing needs to be uploaded by hand — `web-ext sign` talks to the AMO API directly. For a **listed** add-on (the default here) the new version still goes through Mozilla's automated/human review before it's public; check review status on the [AMO developer dashboard](https://addons.mozilla.org/en-US/developers/addons).
 
