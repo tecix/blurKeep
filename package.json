@@ -7,8 +7,8 @@
     "dev": "web-ext run --source-dir=. --target=firefox-desktop --ignore-files generate_assets.py screenshot.jpg icon-128.jpg README.md package.json package-lock.json scripts scripts/** .github .github/**",
     "lint": "web-ext lint --source-dir=. --ignore-files generate_assets.py screenshot.jpg icon-128.jpg README.md package.json package-lock.json scripts scripts/** .github .github/**",
     "build": "web-ext build --source-dir=. --overwrite-dest --ignore-files generate_assets.py screenshot.jpg icon-128.jpg README.md package.json package-lock.json scripts scripts/** .github .github/**",
-    "sign": "web-ext sign --source-dir=. --channel=listed --ignore-files generate_assets.py screenshot.jpg icon-128.jpg README.md package.json package-lock.json scripts scripts/** .github .github/** --api-key=\"$AMO_JWT_ISSUER\" --api-secret=\"$AMO_JWT_SECRET\"",
-    "sign:self": "web-ext sign --source-dir=. --channel=unlisted --ignore-files generate_assets.py screenshot.jpg icon-128.jpg README.md package.json package-lock.json scripts scripts/** .github .github/** --api-key=\"$AMO_JWT_ISSUER\" --api-secret=\"$AMO_JWT_SECRET\"",
+    "sign": "web-ext sign --source-dir=. --channel=listed --ignore-files generate_assets.py screenshot.jpg icon-128.jpg README.md package.json package-lock.json scripts scripts/** .github .github/** --amo-metadata=scripts/amo-metadata.json --api-key=\"$AMO_JWT_ISSUER\" --api-secret=\"$AMO_JWT_SECRET\"",
+    "sign:self": "web-ext sign --source-dir=. --channel=unlisted --ignore-files generate_assets.py screenshot.jpg icon-128.jpg README.md package.json package-lock.json scripts scripts/** .github .github/** --amo-metadata=scripts/amo-metadata.json --api-key=\"$AMO_JWT_ISSUER\" --api-secret=\"$AMO_JWT_SECRET\"",
     "bump": "node scripts/bump-version.js"
   },
   "devDependencies": {
