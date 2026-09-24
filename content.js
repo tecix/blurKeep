@@ -5,6 +5,7 @@
   let isEnabled = true;
   let blurAmount = 6;
   let updateTimer = null;
+  let watchTimer = null;
 
   function ensureOverlay() {
     if (!document.getElementById(OVERLAY_ID)) {
@@ -34,6 +35,17 @@
   function applyState() {
     const active = isEnabled && isNoteOpen();
     document.documentElement.classList.toggle('blurkeep-active', active);
+
+    // Keep closes notes via the page's history.pushState, which the content
+    // script can't intercept (isolated world), so no event fires for it. If
+    // the last DOM mutation lands before the URL updates (fast open/close),
+    // nothing would re-check. While blurred, keep re-checking until closed.
+    if (active && !watchTimer) {
+      watchTimer = setInterval(applyState, 200);
+    } else if (!active && watchTimer) {
+      clearInterval(watchTimer);
+      watchTimer = null;
+    }
   }
 
   function scheduleUpdate() {
