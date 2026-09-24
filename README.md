@@ -16,7 +16,7 @@ A small Firefox extension that blurs your other notes in [Google Keep](https://k
 
 ### From addons.mozilla.org (AMO)
 
-Once published, install directly from the Firefox Add-ons store (link TBD).
+Install directly from the Firefox Add-ons store: [BlurKeep on addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/blurkeep1/).
 
 ### Temporary install (for testing)
 
