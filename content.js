@@ -19,17 +19,31 @@
     document.documentElement.style.setProperty('--blurkeep-blur', `${px}px`);
   }
 
+  // Keep (and Google web apps generally) often leave dialog containers
+  // mounted in the DOM after closing them, just toggling visibility instead
+  // of removing them. A plain querySelector for [role="dialog"] etc. would
+  // then match forever, holding the blur on permanently. Require the match
+  // to actually be visible.
+  function isVisible(el) {
+    if (!el) return false;
+    if (el.getAttribute('aria-hidden') === 'true') return false;
+    const style = window.getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden') return false;
+    const rect = el.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  }
+
   function isNoteOpen() {
     // Keep uses #NOTE/..., #LIST/..., #BLOB/..., etc. when a note is open.
     // Match any hash that looks like TYPE/ID (uppercase letters, then slash, then ID).
     if (/^#[A-Z]+\//.test(window.location.hash)) return true;
 
     // Fallback: ARIA-based (Keep may or may not use these)
-    return !!(
-      document.querySelector('[role="dialog"]') ||
-      document.querySelector('[aria-modal="true"]') ||
-      document.querySelector('dialog[open]')
-    );
+    const candidates = document.querySelectorAll('[role="dialog"], [aria-modal="true"], dialog[open]');
+    for (const el of candidates) {
+      if (isVisible(el)) return true;
+    }
+    return false;
   }
 
   function applyState() {
